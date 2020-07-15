@@ -43,12 +43,17 @@ function makeBid(G, ctx, amount) {
 
 	// Log the history
 	G.bids.push({ player: ctx.currentPlayer, bid_value: amount });
-	ctx.events.endTurn();
+	if (isBiddingDone(G, ctx)) {
+		ctx.events.endPhase();
+	} else {
+		ctx.events.endTurn();
+	}
 }
 
 function isBiddingDone(G, ctx) {
 	// If the current bid can't be outbid we're done
 	if (G.game_bid != null && G.game_bid.bid_value === TANI_BID) {
+		G.chat.push(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
 		return true;
 	}
 	// If there's < N bids bidding can't be done
@@ -59,6 +64,7 @@ function isBiddingDone(G, ctx) {
 			bid_sum += G.bids[i].bid_value;
 		}
 		if (bid_sum === 0) {
+			G.chat.push(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
 			return true;
 		}
 	}
@@ -310,7 +316,6 @@ export const FourPlayer56Game = {
 			},
 			start: true,
 			next: 'hide_trump_phase',
-			endIf: isBiddingDone,
 		},
 		hide_trump_phase: {
 			// Winning bidder's turn to select a trump card
