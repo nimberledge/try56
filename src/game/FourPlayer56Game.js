@@ -3,15 +3,20 @@ import { INVALID_MOVE } from 'boardgame.io/core';
 
 const NUM_PLAYERS = 4;
 const NUM_TABLE_ROUNDS = 8;
+const BID_28_PTS = 1;
+const BID_40_PTS = 2;
+const BID_TANI_PTS = NUM_PLAYERS;
+const TANI_BID = 56;
+const FIRST_BID_MINIMUM = 28;
 
 function makeBid(G, ctx, amount) {
 	// Make sure bids aren't nonsense
-	if (amount > 56 || amount < 0) {
+	if (amount > TANI_BID || amount < 0) {
 		return INVALID_MOVE;
 	}
 	// Make sure first bid is >= 28
 	if (G.bids.length === 0) {
-		if (amount < 28) {
+		if (amount < FIRST_BID_MINIMUM) {
 			return INVALID_MOVE;
 		}
 	} else {
@@ -42,7 +47,7 @@ function makeBid(G, ctx, amount) {
 
 function isBiddingDone(G, ctx) {
 	// If the current bid can't be outbid we're done
-	if (G.game_bid != null && G.game_bid.bid_value === 56) {
+	if (G.game_bid != null && G.game_bid.bid_value === TANI_BID) {
 		return true;
 	}
 	// If there's < N bids bidding can't be done
@@ -118,13 +123,66 @@ function checkValidLead(G, ctx, card_index) {
 	return true;
 }
 
-// function computeGameWinner(G, ctx) {
-// 	var team0_total = 0;
-// 	var team1_total = 0;
-// 	for (let i = 0; i < G.rounds.length; i++) {
-//
-// 	}
-// }
+function computeGameWinner(G, ctx) {
+	var team_totals = [0, 0];
+	for (let i = 0; i < G.rounds.length; i++) {
+		var round_total = 0;
+		for (let j = 0; j < rounds[i].length; j++) {
+			round_total += rounds[i][j].card.value;
+		}
+		team_totals[G.players[G.round_winners[i]].team] += round_total;
+	}
+	var bid_team = G.players[G.game_bid.player].team;
+	var def_team = -1 * bid_team + 1;
+	G.chat.push("Team " + bid_team + " made " + team_totals[bid_team] + " points");
+	if (team_totals[bid_team] >= G.game_bid.bid_value) {
+		G.chat.push("Team " + bid_team + " made their bid of " + G.game_bid.bid_value);
+		if (G.game_bid.bid_value < 40) {
+			G.overall_pts[bid_team] += BID_28_PTS;
+		} else {
+			G.overall_pts[bid_team] += BID_40_PTS;
+		}
+	} else {
+		G.chat.push("Team " + bid_team + " failed to make their bid of " + G.game_bid.bid_value);
+		if (G.game_bid.bid_value < 40) {
+			G.overall_pts[def_team] += BID_28_PTS + 1;
+		} else {
+			G.overall_pts[def_team] += BID_40_PTS + 1;
+		}
+	}
+	G.chat.push("Team 0 total: " + G.overall_pts[0]);
+	G.chat.push("Team 1 total: " + G.overall_pts[1]);
+}
+
+function resetGameState(G, ctx) {
+	G.deck = generate4PDeck();
+	G.game_bid = null;
+	G.starting_player = (G.starting_player + 1) % NUM_PLAYERS;
+	G.hidden_trump_card = null;
+	G.trump_revealed = false;
+	G.trump_suit = null;
+	G.bids = [];
+	G.rounds = [];
+	G.round_winners = [];
+	G.current_round = [];
+	G.current_round_idx = null;
+	G.imminent_trump_request = false;
+	for (let i = 0; i < NUM_PLAYERS; i++) {
+		G.players[i].cards = [];
+	}
+	G.chat.push("");
+	G.chat.push("Starting a new round");
+	// Deal cards
+	var deck_length = G.deck.length;
+	for (let i = 0; i < deck_length; i++) {
+		G.players[i % NUM_PLAYERS].cards.push(G.deck.pop());
+	}
+	// Sort cards for the lads
+	for (let i = 0; i < NUM_PLAYERS; i++) {
+		GameUtils.sortHand(start.players[i].cards);
+	}
+	ctx.events.setPhase('bid_phase');
+}
 
 function playCardFromHand(G, ctx, card_index) {
 	if (G.current_round.length !== 0) {
@@ -154,6 +212,7 @@ function playCardFromHand(G, ctx, card_index) {
 
 		// If we've played all the rounds, compute whether teams made their bid amounts
 		if (G.rounds.length === NUM_TABLE_ROUNDS) {
+			computeGameWinner(G, ctx);
 			ctx.events.endPhase();
 		} else {
 			ctx.events.endTurn({ next: next_starter });
@@ -220,7 +279,8 @@ export const FourPlayer56Game = {
 			round_winners: [],
 			current_round_idx: null,
 			current_round: [],
-			bids: []
+			bids: [],
+			overall_pts: [0, 0]
 		};
 		// Deal cards to all players
 		var deck_length = deck.length;
@@ -241,6 +301,12 @@ export const FourPlayer56Game = {
 	phases: {
 		bid_phase: {
 			moves: { makeBid },
+			turn: {
+				order: {
+					first: (G, ctx) => G.starting_player,
+					next: (G, ctx) => (ctx.playOrderPos + 1) % ctx.numPlayers,
+				}
+			},
 			start: true,
 			next: 'hide_trump_phase',
 			endIf: isBiddingDone,
@@ -269,6 +335,7 @@ export const FourPlayer56Game = {
 			},
 			moves: {
 				playCardFromHand,
+				// Don't count trump request as a move, as you still have to play a card
 				requestTrump: {
 					move: requestTrumpReveal,
 					noLimit: true
