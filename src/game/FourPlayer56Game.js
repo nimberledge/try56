@@ -5,7 +5,7 @@ const NUM_PLAYERS = 4;
 const NUM_TABLE_ROUNDS = 8;
 const BID_28_PTS = 1;
 const BID_40_PTS = 2;
-const BID_TANI_PTS = NUM_PLAYERS;
+// const BID_TANI_PTS = NUM_PLAYERS;
 const TANI_BID = 56;
 const FIRST_BID_MINIMUM = 28;
 
@@ -43,6 +43,7 @@ function makeBid(G, ctx, amount) {
 
 	// Log the history
 	G.bids.push({ player: ctx.currentPlayer, bid_value: amount });
+	ctx.events.endTurn();
 }
 
 function isBiddingDone(G, ctx) {
@@ -127,8 +128,8 @@ function computeGameWinner(G, ctx) {
 	var team_totals = [0, 0];
 	for (let i = 0; i < G.rounds.length; i++) {
 		var round_total = 0;
-		for (let j = 0; j < rounds[i].length; j++) {
-			round_total += rounds[i][j].card.value;
+		for (let j = 0; j < G.rounds[i].length; j++) {
+			round_total += G.rounds[i][j].card.value;
 		}
 		team_totals[G.players[G.round_winners[i]].team] += round_total;
 	}
@@ -155,7 +156,7 @@ function computeGameWinner(G, ctx) {
 }
 
 function resetGameState(G, ctx) {
-	G.deck = generate4PDeck();
+	G.deck = GameUtils.generate4PDeck();
 	G.game_bid = null;
 	G.starting_player = (G.starting_player + 1) % NUM_PLAYERS;
 	G.hidden_trump_card = null;
@@ -179,7 +180,7 @@ function resetGameState(G, ctx) {
 	}
 	// Sort cards for the lads
 	for (let i = 0; i < NUM_PLAYERS; i++) {
-		GameUtils.sortHand(start.players[i].cards);
+		GameUtils.sortHand(G.players[i].cards);
 	}
 	ctx.events.setPhase('bid_phase');
 }
@@ -213,7 +214,7 @@ function playCardFromHand(G, ctx, card_index) {
 		// If we've played all the rounds, compute whether teams made their bid amounts
 		if (G.rounds.length === NUM_TABLE_ROUNDS) {
 			computeGameWinner(G, ctx);
-			ctx.events.endPhase();
+			resetGameState(G, ctx);
 		} else {
 			ctx.events.endTurn({ next: next_starter });
 		}
