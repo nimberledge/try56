@@ -30,6 +30,10 @@ function makeBid(G, ctx, amount) {
 	// If you've outbid the current bid on table, congrats
 	if (G.game_bid == null || amount > G.game_bid.bid_value) {
 		G.game_bid = { player: ctx.currentPlayer, bid_value: amount };
+		G.chat.push(ctx.currentPlayer + " takes the bid at " + amount);
+	}
+	if (amount === 0) {
+		G.chat.push(ctx.currentPlayer + " opts to pass");
 	}
 
 	// Log the history
@@ -48,7 +52,6 @@ function isBiddingDone(G, ctx) {
 		for (let i = G.bids.length - NUM_PLAYERS + 1; i < G.bids.length; i++) {
 			bid_sum += G.bids[i].bid_value;
 		}
-		console.log(bid_sum);
 		if (bid_sum === 0) {
 			return true;
 		}
@@ -69,6 +72,20 @@ function checkValidSuit(G, ctx, round, card_index) {
 	var round_suit = round[0].card.suit;
 	var player_cards = G.players[ctx.currentPlayer].cards;
 	var card = player_cards[card_index];
+
+	// If a player requests trump, they're forced to play that suit
+	// unless they don't have the suit
+	if (G.imminent_trump_request) {
+		if (card.suit !== G.trump_suit) {
+			for (let i = 0; i < player_cards.length; i++) {
+				if (player_cards[i].suit === G.trump_suit) {
+					return false;
+				}
+			}
+		}
+		G.imminent_trump_request = false;
+		return true;
+	}
 	// Only allow a mismatch of suits if player has no option
 	if (card.suit !== round_suit) {
 		for (let i = 0; i < player_cards.length; i++) {
@@ -101,6 +118,14 @@ function checkValidLead(G, ctx, card_index) {
 	return true;
 }
 
+// function computeGameWinner(G, ctx) {
+// 	var team0_total = 0;
+// 	var team1_total = 0;
+// 	for (let i = 0; i < G.rounds.length; i++) {
+//
+// 	}
+// }
+
 function playCardFromHand(G, ctx, card_index) {
 	if (G.current_round.length !== 0) {
 		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
@@ -112,21 +137,30 @@ function playCardFromHand(G, ctx, card_index) {
 				return INVALID_MOVE;
 			}
 	}
-	G.current_round.push({ player: ctx.currentPlayer,
-			card: G.players[ctx.currentPlayer].cards[card_index] });
+	var card = G.players[ctx.currentPlayer].cards[card_index];
+	G.current_round.push({ player: ctx.currentPlayer, card: card });
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
+	G.chat.push(ctx.currentPlayer + " played " + card.rank + card.suit);
 
 	// Once all cards in a round are played, log the round and
 	// determine the next round's starter
 	if (G.current_round.length === NUM_PLAYERS) {
 		G.rounds.push(G.current_round);
+		var next_starter = GameUtils.computeRoundWinner(G.current_round, G.trump_suit);
+		G.round_winners.push(next_starter);
 		G.current_round = [];
 		G.current_round_idx++;
+		G.chat.push(next_starter + " won round " + G.current_round_idx);
+
+		// If we've played all the rounds, compute whether teams made their bid amounts
 		if (G.rounds.length === NUM_TABLE_ROUNDS) {
 			ctx.events.endPhase();
+		} else {
+			ctx.events.endTurn({ next: next_starter });
 		}
+	} else {
+		ctx.events.endTurn();
 	}
-	ctx.events.endTurn();
 }
 
 function validTrumpRequst(G, ctx, round) {
@@ -155,6 +189,11 @@ function requestTrumpReveal(G, ctx) {
 	}
 	G.trump_revealed = true;
 	G.trump_suit = G.hidden_trump_card.suit;
+	G.chat.push(ctx.currentPlayer + " asked for the trump card.");
+	G.chat.push("It was " + G.hidden_trump_card.rank + G.hidden_trump_card.suit);
+	G.players[G.game_bid.player].cards.push(G.hidden_trump_card);
+	GameUtils.sortHand(G.players[G.game_bid.player].cards);
+	G.imminent_trump_request = true;
 }
 
 export const FourPlayer56Game = {
@@ -176,7 +215,9 @@ export const FourPlayer56Game = {
 			hidden_trump_card: null,
 			trump_revealed: false,
 			trump_suit: null,
+			imminent_trump_request: false,
 			rounds: [],
+			round_winners: [],
 			current_round_idx: null,
 			current_round: [],
 			bids: []
@@ -225,7 +266,6 @@ export const FourPlayer56Game = {
 					first: (G, ctx) => G.starting_player,
 					next: (G, ctx) => (ctx.playOrderPos + 1) % ctx.numPlayers,
 				},
-				moveLimit: 1,
 			},
 			moves: {
 				playCardFromHand,
