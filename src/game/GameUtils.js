@@ -1,3 +1,6 @@
+export const RANK_ORDER = ['J', '9', 'A', 'T', 'K', 'Q'];
+export const SUIT_ORDER = ['C', 'D', 'S', 'H'];
+
 export const shuffleDeck = (deck) => {
 	for (let i = deck.length - 1; i > 0; i--) {
 		// Swap positions of every card with a random other card
@@ -38,3 +41,16 @@ export const generate6PDeck = () => {
 	}
 	return shuffleDeck(deck);
 };
+
+export const compareRank = (first, second) => {
+	return RANK_ORDER.indexOf(first.rank) - RANK_ORDER.indexOf(second.rank);
+}
+
+export const compareSuit = (first, second) => {
+	return SUIT_ORDER.indexOf(first.suit) - SUIT_ORDER.indexOf(second.suit);
+}
+
+export const sortHand = (cards) => {
+	cards.sort(compareRank);
+	cards.sort(compareSuit);
+}

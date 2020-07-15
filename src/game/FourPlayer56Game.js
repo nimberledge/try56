@@ -1,6 +1,9 @@
 import * as GameUtils from './GameUtils';
 import { INVALID_MOVE } from 'boardgame.io/core';
 
+const NUM_PLAYERS = 4;
+const NUM_TABLE_ROUNDS = 8;
+
 function makeBid(G, ctx, amount) {
 	// Make sure bids aren't nonsense
 	if (amount > 56 || amount < 0) {
@@ -38,11 +41,11 @@ function isBiddingDone(G, ctx) {
 	if (G.game_bid != null && G.game_bid.bid_value === 56) {
 		return true;
 	}
-	// If there's < 4 bids bidding can't be done
-	// Else bidding is done when there are 3 passes in a row
-	if (G.bids.length >= 4) {
+	// If there's < N bids bidding can't be done
+	// Else bidding is done when there are N-1 passes in a row
+	if (G.bids.length >= NUM_PLAYERS) {
 		var bid_sum = 0;
-		for (let i = G.bids.length - 3; i < G.bids.length; i++) {
+		for (let i = G.bids.length - NUM_PLAYERS + 1; i < G.bids.length; i++) {
 			bid_sum += G.bids[i].bid_value;
 		}
 		console.log(bid_sum);
@@ -56,23 +59,103 @@ function isBiddingDone(G, ctx) {
 function selectHideTrump(G, ctx, card_index) {
 	G.hidden_trump_card = G.players[ctx.currentPlayer].cards[card_index];
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
-	G.trump_suit = G.hidden_trump_card.suit;
 	ctx.events.endPhase();
 }
 
+function checkValidSuit(G, ctx, round, card_index) {
+	if (round.length === 0) {
+		return true;
+	}
+	var round_suit = round[0].card.suit;
+	var player_cards = G.players[ctx.currentPlayer].cards;
+	var card = player_cards[card_index];
+	// Only allow a mismatch of suits if player has no option
+	if (card.suit !== round_suit) {
+		for (let i = 0; i < player_cards.length; i++) {
+			if (player_cards[i].suit === round_suit) {
+				return false;
+			}
+		}
+		return true;
+	}
+	return true;
+}
+
+function checkValidLead(G, ctx, card_index) {
+	// If you're not the bidder there are no invalid leads
+	// If the trump is revealed there are no invalid leads
+	if (ctx.currentPlayer !== G.game_bid.player || G.trump_revealed) {
+		return true;
+	}
+	// Only allow trump lead when it hasn't been revealed and bidder
+	// has no alternative
+	var player_cards = G.players[ctx.currentPlayer].cards;
+	var card = player_cards[card_index];
+	if (card.suit === G.hidden_trump_card.suit) {
+		for (let i = 0; i < player_cards.length; i++) {
+			if (player_cards[i].suit !== card.suit) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 function playCardFromHand(G, ctx, card_index) {
-	G.current_round.push(G.players[ctx.currentPlayer].cards[card_index]);
+	if (G.current_round.length !== 0) {
+		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
+			return INVALID_MOVE;
+		}
+	} else {
+			// Ensure bidding player does not lead trump suit
+			if (!checkValidLead(G, ctx, card_index)) {
+				return INVALID_MOVE;
+			}
+	}
+	G.current_round.push({ player: ctx.currentPlayer,
+			card: G.players[ctx.currentPlayer].cards[card_index] });
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
-	if (G.current_round.length === 4) {
+
+	// Once all cards in a round are played, log the round and
+	// determine the next round's starter
+	if (G.current_round.length === NUM_PLAYERS) {
 		G.rounds.push(G.current_round);
 		G.current_round = [];
 		G.current_round_idx++;
+		if (G.rounds.length === NUM_TABLE_ROUNDS) {
+			ctx.events.endPhase();
+		}
 	}
+	ctx.events.endTurn();
 }
 
-// function requestTrumpReveal(G, ctx) {
-//
-// }
+function validTrumpRequst(G, ctx, round) {
+	if (G.trump_revealed) {
+		return false;
+	}
+	// If on the first move, there are no valid trump requests
+	if (round.length === 0) {
+		return false;
+	}
+	// Make sure trump request is forced by not having round_suit
+	var round_suit = round[0].card.suit;
+	var player_cards = G.players[ctx.currentPlayer].cards;
+	for (let i = 0; i < player_cards.length; i++) {
+		if (player_cards[i].suit === round_suit) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function requestTrumpReveal(G, ctx) {
+	// TODO: Validate move
+	if (!validTrumpRequst(G, ctx, G.current_round)) {
+		return INVALID_MOVE;
+	}
+	G.trump_revealed = true;
+	G.trump_suit = G.hidden_trump_card.suit;
+}
 
 export const FourPlayer56Game = {
 	name: "Four-Player-56",
@@ -101,7 +184,11 @@ export const FourPlayer56Game = {
 		// Deal cards to all players
 		var deck_length = deck.length;
 		for (let i = 0; i < deck_length; i++) {
-			start.players[i % 4].cards.push(start.deck.pop());
+			start.players[i % NUM_PLAYERS].cards.push(start.deck.pop());
+		}
+		// Sort cards for the lads
+		for (let i = 0; i < NUM_PLAYERS; i++) {
+			GameUtils.sortHand(start.players[i].cards);
 		}
 		return start;
 	},
@@ -136,9 +223,17 @@ export const FourPlayer56Game = {
 			turn: {
 				order: {
 					first: (G, ctx) => G.starting_player,
+					next: (G, ctx) => (ctx.playOrderPos + 1) % ctx.numPlayers,
+				},
+				moveLimit: 1,
+			},
+			moves: {
+				playCardFromHand,
+				requestTrump: {
+					move: requestTrumpReveal,
+					noLimit: true
 				}
 			},
-			moves: { playCardFromHand },
 		},
 	},
 };
