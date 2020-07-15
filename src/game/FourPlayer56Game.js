@@ -53,6 +53,27 @@ function isBiddingDone(G, ctx) {
 	return false;
 }
 
+function selectHideTrump(G, ctx, card_index) {
+	G.hidden_trump_card = G.players[ctx.currentPlayer].cards[card_index];
+	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
+	G.trump_suit = G.hidden_trump_card.suit;
+	ctx.events.endPhase();
+}
+
+function playCardFromHand(G, ctx, card_index) {
+	G.current_round.push(G.players[ctx.currentPlayer].cards[card_index]);
+	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
+	if (G.current_round.length === 4) {
+		G.rounds.push(G.current_round);
+		G.current_round = [];
+		G.current_round_idx++;
+	}
+}
+
+// function requestTrumpReveal(G, ctx) {
+//
+// }
+
 export const FourPlayer56Game = {
 	name: "Four-Player-56",
 	setup: () => {
@@ -70,6 +91,11 @@ export const FourPlayer56Game = {
 			game_bid: null,
 			starting_player: 0,
 			hidden_trump_card: null,
+			trump_revealed: false,
+			trump_suit: null,
+			rounds: [],
+			current_round_idx: null,
+			current_round: [],
 			bids: []
 		};
 		// Deal cards to all players
@@ -88,21 +114,31 @@ export const FourPlayer56Game = {
 		bid_phase: {
 			moves: { makeBid },
 			start: true,
-			next: null,
+			next: 'hide_trump_phase',
 			endIf: isBiddingDone,
 		},
-		// hide_trump_phase: {
-		// 	moves: { hideTrump }
-		// },
+		hide_trump_phase: {
+			// Winning bidder's turn to select a trump card
+			turn: {
+				order: {
+					first: (G, ctx) => G.game_bid.player,
+				}
+			},
+			moves: { selectHideTrump },
+			next: 'table_play_phase'
+		},
+		table_play_phase: {
+			// Left of the dealer starts the roundplay
+			onBegin: (G, ctx) => {
+				G.current_round_idx = 0;
+				G.current_round = [];
+			},
+			turn: {
+				order: {
+					first: (G, ctx) => G.starting_player,
+				}
+			},
+			moves: { playCardFromHand },
+		},
 	},
-
-	// moves: {
-	// 	selectHideTrump: {
-	// 		move: (G, ctx) => {}
-	// 	},
-	//
-	// 	playCardFromHand: {
-	// 		move: (G, ctx) => {}
-	// 	}
-	// }
 };
