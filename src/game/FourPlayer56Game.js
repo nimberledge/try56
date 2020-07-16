@@ -131,6 +131,7 @@ function checkValidLead(G, ctx, card_index) {
 }
 
 function computeGameWinner(G, ctx) {
+	// Sum up each round's points, check if bidding team made their bid
 	var team_totals = [0, 0];
 	for (let i = 0; i < G.rounds.length; i++) {
 		var round_total = 0;
@@ -162,7 +163,6 @@ function computeGameWinner(G, ctx) {
 }
 
 function resetGameState(G, ctx) {
-	G.deck = GameUtils.generate4PDeck();
 	G.game_bid = null;
 	G.starting_player = (G.starting_player + 1) % NUM_PLAYERS;
 	G.hidden_trump_card = null;
@@ -177,9 +177,10 @@ function resetGameState(G, ctx) {
 	for (let i = 0; i < NUM_PLAYERS; i++) {
 		G.players[i].cards = [];
 	}
-	G.chat.push("");
+	// G.chat.push("");
 	G.chat.push("Starting a new round");
 	// Deal cards
+	G.deck = GameUtils.generate4PDeck();
 	var deck_length = G.deck.length;
 	for (let i = 0; i < deck_length; i++) {
 		G.players[i % NUM_PLAYERS].cards.push(G.deck.pop());
@@ -192,15 +193,15 @@ function resetGameState(G, ctx) {
 }
 
 function playCardFromHand(G, ctx, card_index) {
-	if (G.current_round.length !== 0) {
-		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
+	if (G.current_round.length === 0) {
+		// Ensure bidding player does not lead trump suit
+		if (!checkValidLead(G, ctx, card_index)) {
 			return INVALID_MOVE;
 		}
 	} else {
-			// Ensure bidding player does not lead trump suit
-			if (!checkValidLead(G, ctx, card_index)) {
-				return INVALID_MOVE;
-			}
+		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
+			return INVALID_MOVE;
+		}
 	}
 	var card = G.players[ctx.currentPlayer].cards[card_index];
 	G.current_round.push({ player: ctx.currentPlayer, card: card });
