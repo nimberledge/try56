@@ -141,7 +141,7 @@ var cardsScript = document.currentScript;
     };
 
     // The default is to remove the card from the hand.
-    module.playCard = module.remove;
+    // module.playCard = module.remove;
 
     function addCardImages(hand, cards) {
         var i,
