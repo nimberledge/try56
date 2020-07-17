@@ -57,6 +57,14 @@ export class DummyDebugTable extends React.Component {
 			bid_history_div = <div id="bid_history_div"> No bids to show </div>;
 		}
 
+		// Display chat
+		let chat = this.props.G.chat;
+		let chats = [];
+		for (let i = 0; i < chat.length; i++) {
+			chats.push(<p> { chat[i] } </p>);
+		}
+		let chat_div = <div id="chat_div"> { chats } </div>;
+
 		let hand0_div = <div className='hand hhand-compact active-hand'>
 			{ all_player_cards[0] }
 		</div>;
@@ -71,6 +79,7 @@ export class DummyDebugTable extends React.Component {
 		</div>;
 		return <div>
 		{ bid_history_div }
+		{ chat_div }
 		{ round }
 		{ current_round }
 		{ phase }

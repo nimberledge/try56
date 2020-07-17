@@ -29,3 +29,9 @@ code {
   left: 50px;
   top: 20px;
 }
+
+#chat_div {
+  position: absolute;
+  left: 450px;
+  top: 0px;
+}

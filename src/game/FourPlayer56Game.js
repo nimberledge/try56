@@ -74,6 +74,8 @@ function isBiddingDone(G, ctx) {
 function selectHideTrump(G, ctx, card_index) {
 	G.hidden_trump_card = G.players[ctx.currentPlayer].cards[card_index];
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
+	G.chat.push(G.game_bid.player + " hid a card. It's a secret.");
+	G.chat.push("Don't tell anyone, but it was: " + G.hidden_trump_card.rank + G.hidden_trump_card.suit);
 	ctx.events.endPhase();
 }
 
@@ -178,7 +180,8 @@ function resetGameState(G, ctx) {
 		G.players[i].cards = [];
 	}
 	// G.chat.push("");
-	G.chat.push("Starting a new round");
+	G.chat = [];
+	G.chat.push("Starting a new round, dealing cards");
 	// Deal cards
 	G.deck = GameUtils.generate4PDeck();
 	var deck_length = G.deck.length;
