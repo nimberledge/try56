@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: 50px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -10,4 +10,22 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+#bid_history_div {
+  position: absolute;
+  left: 350px;
+  top: 0px;
+}
+
+#round {
+  position: absolute;
+  left: 50px;
+  top: 0px;
+}
+
+#current_round {
+  position: absolute;
+  left: 50px;
+  top: 20px;
 }
