@@ -10,6 +10,7 @@
     "cardsJS": "^1.1.1",
     "esm": "^3.2.25",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.2.2",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1"
   },

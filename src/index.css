@@ -53,6 +53,77 @@ code {
   transform: rotate(270deg);
 }
 
+#table_cards_container {
+  position: absolute;
+  width: 50%;
+  height: 70%;
+  left: 25%;
+  top: 15%;
+}
+
+#west-table-card {
+  position: absolute;
+  width: 140%;
+  top: 97%;
+  right: 3%;
+  transform: rotate(90deg);
+}
+
+#east-table-card {
+  position: absolute;
+  width: 140%;
+  top: -21%;
+  left: 7.5%;
+  transform: rotate(270deg);
+}
+
+#north-table-card {
+  width: 140%;
+  position: absolute;
+  top: 15%;
+  left: -17%;
+  text-align: center;
+  transform: rotate(180deg);
+}
+
+#south-table-card {
+  width: 140%;
+  position: absolute;
+  top: 60%;
+  left: 45%;
+}
+
+/* #logo {
+  transform: scale(0.4);
+  position: absolute;
+  top: -17.5%;
+  left: 12%;
+}
+
+#score-board {
+  position: absolute;
+  top: -25%;
+  left: 50%;
+} */
+
+#scoreboard-container {
+  position: absolute;
+  left: 80%;
+  top: 30%;
+  color: white;
+  font-size: 400%;
+  float: left;
+  clear: none;
+}
+
+#team-names {
+  word-spacing: 1.2em;
+}
+
+#team-scores {
+  word-spacing: 1.2em;
+}
+
 #game_table {
   display: inline-block;;
   width: 65%;

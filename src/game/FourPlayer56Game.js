@@ -11,7 +11,7 @@ const FIRST_BID_MINIMUM = 28;
 
 function makeBid(G, ctx, amount) {
 	// Make sure bids aren't nonsense
-	if (amount > TANI_BID || amount < 0) {
+	if (amount > TANI_BID || amount < 0 || amount == null) {
 		return INVALID_MOVE;
 	}
 	// Make sure first bid is >= 28
@@ -72,6 +72,9 @@ function isBiddingDone(G, ctx) {
 }
 
 function selectHideTrump(G, ctx, card_index) {
+	if (card_index == null || card_index >= G.players[ctx.currentPlayer].cards.length || card_index < 0) {
+		return INVALID_MOVE;
+	}
 	G.hidden_trump_card = G.players[ctx.currentPlayer].cards[card_index];
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
 	G.chat.push(G.game_bid.player + " hid a card. It's a secret.");
@@ -130,6 +133,48 @@ function checkValidLead(G, ctx, card_index) {
 		}
 	}
 	return true;
+}
+
+function playCardFromHand(G, ctx, card_index) {
+	if (G.current_round.length === 0) {
+		// Ensure bidding player does not lead trump suit
+		if (!checkValidLead(G, ctx, card_index)) {
+			return INVALID_MOVE;
+		}
+	} else if (G.current_round.length === NUM_PLAYERS) {
+		if (!checkValidLead(G, ctx, card_index)) {
+			return INVALID_MOVE;
+		}
+		G.current_round = [];
+		G.current_round_idx++;
+	} else {
+		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
+			return INVALID_MOVE;
+		}
+	}
+	var card = G.players[ctx.currentPlayer].cards[card_index];
+	G.current_round.push({ player: ctx.currentPlayer, card: card });
+	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
+	G.chat.push(ctx.currentPlayer + " played " + card.rank + card.suit);
+
+	// Once all cards in a round are played, log the round and
+	// determine the next round's starter
+	if (G.current_round.length === NUM_PLAYERS) {
+		G.rounds.push(G.current_round);
+		var next_starter = GameUtils.computeRoundWinner(G.current_round, G.trump_suit);
+		G.round_winners.push(next_starter);
+		G.chat.push(next_starter + " won round " + G.current_round_idx);
+
+		// If we've played all the rounds, compute whether teams made their bid amounts
+		if (G.rounds.length === NUM_TABLE_ROUNDS) {
+			computeGameWinner(G, ctx);
+			resetGameState(G, ctx);
+		} else {
+			ctx.events.endTurn({ next: next_starter });
+		}
+	} else {
+		ctx.events.endTurn();
+	}
 }
 
 function computeGameWinner(G, ctx) {
@@ -193,44 +238,6 @@ function resetGameState(G, ctx) {
 		GameUtils.sortHand(G.players[i].cards);
 	}
 	ctx.events.setPhase('bid_phase');
-}
-
-function playCardFromHand(G, ctx, card_index) {
-	if (G.current_round.length === 0) {
-		// Ensure bidding player does not lead trump suit
-		if (!checkValidLead(G, ctx, card_index)) {
-			return INVALID_MOVE;
-		}
-	} else {
-		if (!checkValidSuit(G, ctx, G.current_round, card_index)) {
-			return INVALID_MOVE;
-		}
-	}
-	var card = G.players[ctx.currentPlayer].cards[card_index];
-	G.current_round.push({ player: ctx.currentPlayer, card: card });
-	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
-	G.chat.push(ctx.currentPlayer + " played " + card.rank + card.suit);
-
-	// Once all cards in a round are played, log the round and
-	// determine the next round's starter
-	if (G.current_round.length === NUM_PLAYERS) {
-		G.rounds.push(G.current_round);
-		var next_starter = GameUtils.computeRoundWinner(G.current_round, G.trump_suit);
-		G.round_winners.push(next_starter);
-		G.current_round = [];
-		G.current_round_idx++;
-		G.chat.push(next_starter + " won round " + G.current_round_idx);
-
-		// If we've played all the rounds, compute whether teams made their bid amounts
-		if (G.rounds.length === NUM_TABLE_ROUNDS) {
-			computeGameWinner(G, ctx);
-			resetGameState(G, ctx);
-		} else {
-			ctx.events.endTurn({ next: next_starter });
-		}
-	} else {
-		ctx.events.endTurn();
-	}
 }
 
 function validTrumpRequst(G, ctx, round) {
