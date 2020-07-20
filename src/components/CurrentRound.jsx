@@ -21,22 +21,22 @@ class CurrentRound extends React.Component {
 		if (!!cards_played[1]) {
 			west_card = <div id='west-table-card'> { cards_played[1] } </div>;
 		} else {
-			west_card = <div id='west-table-card'> <img className='card' src='cards/Blue_Back.svg' alt='blank' /> </div>;
+			west_card = <div id='west-table-card'> <img className='card' src='' alt='' /> </div>;
 		}
 		if (!!cards_played[2]) {
 			north_card = <div id='north-table-card'> { cards_played[2] } </div>;
 		} else {
-			north_card = <div id='north-table-card'> <img className='card' src='cards/Blue_Back.svg' alt='blank' /> </div>;
+			north_card = <div id='north-table-card'> <img className='card' src='' alt='' /> </div>;
 		}
 		if (!!cards_played[3]) {
 			east_card = <div id='east-table-card'> { cards_played[3] } </div>;
 		} else {
-			east_card = <div id='east-table-card'> <img className='card' src='cards/Blue_Back.svg' alt='blank' /> </div>;
+			east_card = <div id='east-table-card'> <img className='card' src='' alt='' /> </div>;
 		}
 		if (!!cards_played[0]) {
 			south_card = <div id='south-table-card'> { cards_played[0] } </div>;
 		} else {
-			south_card = <div id='south-table-card'> <img className='card' src='cards/Blue_Back.svg' alt='blank' /> </div>;
+			south_card = <div id='south-table-card'> <img className='card' src='' alt='' /> </div>;
 		}
 		// console.log(cards_played);
 		return <div>

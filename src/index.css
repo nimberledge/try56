@@ -15,7 +15,24 @@ code {
 
 #player-cards {
   display: inline-block;
-  position: relative;
+  width: 100%;
+}
+
+#opp_left_cards {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+#opp_right_cards {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+
+#teammate_cards {
+  display: inline-block;
+  width: 100%;
 }
 
 #player_cards_container {
@@ -64,7 +81,7 @@ code {
 #west-table-card {
   position: absolute;
   width: 140%;
-  top: 97%;
+  top: 38%;
   right: 3%;
   transform: rotate(90deg);
 }
@@ -72,7 +89,7 @@ code {
 #east-table-card {
   position: absolute;
   width: 140%;
-  top: -21%;
+  top: 38%;
   left: 7.5%;
   transform: rotate(270deg);
 }
@@ -89,22 +106,47 @@ code {
 #south-table-card {
   width: 140%;
   position: absolute;
+  top: 62%;
+  left: -17%;
+}
+
+#trump_card_container {
+  position: absolute;
+  width: 50%;
+  height: 70%;
+  top: 15%;
+  left: 25%;
+}
+
+#east-trump-card {
+  position: absolute;
+  width: 140%;
+  left: 30%;
+  top: 15%;
+  transform: rotate(90deg);
+}
+
+#north-trump-card {
+  position: absolute;
+  width: 140%;
+  top: 12%;
+  right: 8%;
+}
+
+#west-trump-card {
+  position: absolute;
+  width: 140%;
+  transform: rotate(270deg);
+  right: 30%;
   top: 60%;
-  left: 45%;
 }
 
-/* #logo {
-  transform: scale(0.4);
+#south-trump-card {
   position: absolute;
-  top: -17.5%;
-  left: 12%;
+  width: 140%;
+  top: 63%;
+  left: 7%;
 }
-
-#score-board {
-  position: absolute;
-  top: -25%;
-  left: 50%;
-} */
 
 #scoreboard-container {
   position: absolute;
@@ -127,7 +169,7 @@ code {
 #game_table {
   display: inline-block;;
   width: 65%;
-  height: 80%;
+  height: 72.5%;
   padding-top: 10%;
   border-radius: 20px;
   border: 10px solid #443022;
@@ -138,6 +180,7 @@ code {
   position: absolute;
   left: 5%;
   top: 30%;
+  text-align: center;
 }
 /* #bid_history_div {
   position: absolute;
