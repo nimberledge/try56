@@ -8,16 +8,20 @@ import HiddenTrumpCard from './HiddenTrumpCard';
 
 export class FourPlayerGameTable extends React.Component {
 	render() {
-		let current_player = this.props.ctx.currentPlayer;
-		let current_player_cards = this.props.G.players[this.props.ctx.currentPlayer].cards;
+		let current_player = this.props.playerID;
+		// let current_player_cards = this.props.G.players[this.props.playerID].cards;
+		// let current_player = this.props.ctx.currentPlayer;
+		let current_player_cards = this.props.G.players[current_player].cards;
 		// multiply by 1 so JS treats as an integer
-		let teammate_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 2) % 4].cards;
-		let opp_left_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 1) % 4].cards;
-		let opp_right_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 3) % 4].cards;
+		let teammate_cards = this.props.G.players[(current_player*1 + 2) % 4].cards;
+		let opp_left_cards = this.props.G.players[(current_player*1 + 1) % 4].cards;
+		let opp_right_cards = this.props.G.players[(current_player*1 + 3) % 4].cards;
 		let is_bid_phase = this.props.ctx.phase === 'bid_phase' || this.props.ctx.phase === 'hide_trump_phase';
-		console.log(is_bid_phase);
-		console.log(this.props.ctx.phase);
-		let game_table_div = <div className='GameTable' id='game_table'>
+		// console.log(is_bid_phase);
+		// console.log(this.props.ctx.phase);
+		// console.log(this.props.playerID);
+		let table_id = 'game_table';
+		let game_table_div = <div className='GameTable' id={ table_id }>
 			<div id='player_cards_container'>
 				<PlayerCards id="player_cards" cards= { current_player_cards } />
 			</div>

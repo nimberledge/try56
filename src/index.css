@@ -1,5 +1,5 @@
 body {
-  margin: 50px;
+  margin: 0px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -182,6 +182,53 @@ code {
   top: 30%;
   text-align: center;
 }
+
+#main_container {
+  width: 40%;
+  height: 40%;
+  position: absolute;
+  left: 20%;
+  top: 10%;
+}
+
+#player_div {
+  width: 100vw;
+  height: 100vw;
+  float: left;
+}
+
+/* #game_table0, #game_table1, #game_table2, #game_table3 {
+  display: inline-block;;
+  width: 32.5%;
+  height: 36.25%;
+  padding-top: 10%;
+  border-radius: 20px;
+  border: 10px solid #443022;
+  background: #076324;
+  opacity: 1;
+  position: absolute;
+  text-align: center;
+} */
+
+/*
+
+#player1_div {
+  width: 50%;
+  height: 50%;
+  float: left;
+}
+
+#player2_div {
+  width: 50%;
+  height: 50%;
+  float: left;
+}
+
+#player3_div {
+  width: 50%;
+  height: 50%;
+  float: left;
+} */
 /* #bid_history_div {
   position: absolute;
   left: 350px;
