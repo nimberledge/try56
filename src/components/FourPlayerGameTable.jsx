@@ -10,11 +10,13 @@ export class FourPlayerGameTable extends React.Component {
 	render() {
 		let current_player = this.props.ctx.currentPlayer;
 		let current_player_cards = this.props.G.players[this.props.ctx.currentPlayer].cards;
-		let teammate_cards = this.props.G.players[(this.props.ctx.currentPlayer + 2) % 4].cards;
-		let opp_left_cards = this.props.G.players[(this.props.ctx.currentPlayer + 1) % 4].cards;
-		let opp_right_cards = this.props.G.players[(this.props.ctx.currentPlayer + 3) % 4].cards;
-		let is_bid_phase = (this.props.G.phase === 'bid_phase');
-		console.log(is_bid_phase)
+		// multiply by 1 so JS treats as an integer
+		let teammate_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 2) % 4].cards;
+		let opp_left_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 1) % 4].cards;
+		let opp_right_cards = this.props.G.players[(this.props.ctx.currentPlayer*1 + 3) % 4].cards;
+		let is_bid_phase = this.props.ctx.phase === 'bid_phase' || this.props.ctx.phase === 'hide_trump_phase';
+		console.log(is_bid_phase);
+		console.log(this.props.ctx.phase);
 		let game_table_div = <div className='GameTable' id='game_table'>
 			<div id='player_cards_container'>
 				<PlayerCards id="player_cards" cards= { current_player_cards } />
@@ -37,8 +39,6 @@ export class FourPlayerGameTable extends React.Component {
 					trump_card={ this.props.G.hidden_trump_card } bid_phase={ is_bid_phase } />
 			</div>
 		</div>;
-		// let logo_div = <div id='logo'> <img id='56_logo' src='56_logo.jpg' alt='yippee'/> </div>;
-
 		// Scoreboard
 		let score_board_container = <div id='scoreboard-container'>
 			<ScoreBoard id='score-board' score={ this.props.G.overall_pts } />
