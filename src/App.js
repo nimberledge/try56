@@ -9,8 +9,8 @@ const FourPlayer56Client = Client({
   game: FourPlayer56Game,
   board: FourPlayerGameTable,
 	numPlayers: 4,
-  debug: true,
-  multiplayer: SocketIO({ server: "localhost:8000" }),
+  multiplayer: SocketIO({ server: "192.168.1.18:8000" }),
+  debug: false
 });
 
 class App extends React.Component {

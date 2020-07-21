@@ -93,10 +93,9 @@ export class FourPlayerGameTable extends React.Component {
 
 
 
-
+		
 		return <div>
 			{ game_table_div }
-			{ score_board_container }
 		</div>;
 	}
 };

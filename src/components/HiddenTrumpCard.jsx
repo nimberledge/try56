@@ -1,5 +1,4 @@
 import React from 'react';
-import { INVALID_MOVE } from 'boardgame.io/core';
 
 class HiddenTrumpCard extends React.Component {
 	processTrumpRequest() {
