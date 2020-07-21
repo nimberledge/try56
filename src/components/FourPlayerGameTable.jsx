@@ -1,15 +1,24 @@
 import React from 'react';
-import PlayerCards from './PlayerCards';
 import TeammateCards from './TeammateCards';
 import OpponentCards from './OpponentCards';
 import ScoreBoard from './ScoreBoard';
 import CurrentRound from './CurrentRound';
 import HiddenTrumpCard from './HiddenTrumpCard';
+import BidTable from './BidTable';
 
 export class FourPlayerGameTable extends React.Component {
+	processBid(button_id) {
+		if (this.props.ctx.phase !== 'bid_phase') {
+			alert("How did you manage this??");
+			return;
+		}
+		let bid_value = button_id.slice(10);
+		this.props.moves.makeBid(bid_value*1);
+	}
+
 	playCard(card_key, ctx, playerID) {
 		// Make clicks invalid if it's not the current player's turn
-		if (ctx.phase === 'bid_phase' || ctx.currentPlayer != playerID) {
+		if (ctx.phase === 'bid_phase' || ctx.currentPlayer !== playerID) {
 			alert("Wait for your turn");
 			return;
 		}
@@ -43,9 +52,13 @@ export class FourPlayerGameTable extends React.Component {
 		let opp_left_cards = this.props.G.players[(current_player*1 + 1) % 4].cards;
 		let opp_right_cards = this.props.G.players[(current_player*1 + 3) % 4].cards;
 		let is_bid_phase = this.props.ctx.phase === 'bid_phase' || this.props.ctx.phase === 'hide_trump_phase';
-		// console.log(is_bid_phase);
-		// console.log(this.props.ctx.phase);
-		// console.log(this.props.playerID);
+
+		let bid_table_div = '';
+		if (this.props.ctx.phase === 'bid_phase') {
+			bid_table_div = <BidTable game_bid={ this.props.G.game_bid } ctx={ this.props.ctx } moves={ this.props.moves } />;
+		} else {
+			bid_table_div = <div />;
+		}
 
 		// Was not able to make a hand active, so let's try what I did with the debug table
 
@@ -74,6 +87,9 @@ export class FourPlayerGameTable extends React.Component {
 				<HiddenTrumpCard id="hidden-trump-card" game_bid={ this.props.G.game_bid } current_player={ current_player }
 					trump_revealed={ this.props.G.trump_revealed } imminent_trump_request={ this.props.G.imminent_trump_request }
 					trump_card={ this.props.G.hidden_trump_card } bid_phase={ is_bid_phase } />
+			</div>
+			<div id='bid_table_container'>
+				{ bid_table_div }
 			</div>
 		</div>;
 		// Scoreboard

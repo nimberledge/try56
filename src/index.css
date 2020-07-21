@@ -13,6 +13,56 @@ code {
     monospace;
 }
 
+#bid_table_container {
+  position: absolute;
+  width: 60%;
+  /* height: */
+  left: 20%;
+  top: 21%;
+  text-align: center;
+}
+
+#bid_table {
+  width: 100%;
+  border: 4px solid black;
+  z-index: +1;
+}
+
+#bid_button28, #bid_button29, #bid_button30, #bid_button31, #bid_button32, #bid_button33, #bid_button34,
+#bid_button35, #bid_button36, #bid_button37, #bid_button38, #bid_button39 {
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+  background-color: pink;
+}
+
+#bid_button40, #bid_button41, #bid_button42, #bid_button43, #bid_button44, #bid_button45, #bid_button46,
+#bid_button47, #bid_button48, #bid_button49, #bid_button50, #bid_button51, #bid_button52, #bid_button53,
+#bid_button54, #bid_button55 {
+  width: 80px;
+  height: 80px;
+  font-size: 30px;
+  background-color: cyan;
+}
+
+#bid_button56 {
+  height: 80px;
+  width: 80px;
+  font-size: 30px;
+  color: white;
+  background-color: magenta;
+}
+
+#bid_button0 {
+  height: 80px;
+  width: 80px;
+  font-size: 30px;
+  color: white;
+  background-color: blue;
+  text-align: center;
+}
+
+
 #player-cards {
   display: block;
   width: 100%;
@@ -60,7 +110,7 @@ code {
   text-align: left;
   position: relative;
   width: 80%;
-  right: 30%;
+  right: 32.25%;
   top: 44%;
   transform: rotate(90deg);
 }
@@ -69,7 +119,7 @@ code {
   text-align: right;
   position: relative;
   width: 80%;
-  left: 50%;
+  left: 52.15%;
   top: 18%;
   transform: rotate(270deg);
 }
