@@ -207,6 +207,12 @@ function computeGameWinner(G, ctx) {
 	}
 	G.chat.push("Team 0 total: " + G.overall_pts[0]);
 	G.chat.push("Team 1 total: " + G.overall_pts[1]);
+	let game_info = {
+		bid_team: bid_team,
+		team_totals: team_totals,
+		game_bid: G.game_bid
+	}
+	G.last_round_info = game_info;
 }
 
 function resetGameState(G, ctx) {
@@ -298,7 +304,8 @@ export const FourPlayer56Game = {
 			current_round_idx: null,
 			current_round: [],
 			bids: [],
-			overall_pts: [0, 0]
+			overall_pts: [0, 0],
+			last_round_info: null
 		};
 		// Deal cards to all players
 		var deck_length = deck.length;

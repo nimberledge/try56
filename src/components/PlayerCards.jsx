@@ -3,15 +3,6 @@ import React from 'react';
 
 
 class PlayerCards extends React.Component {
-
-	justAlert() {
-		alert("yipee");
-	}
-
-	playCard() {
-		console.log(this.id);
-	}
-
 	render () {
 		let card_imgs = [];
 		for (let i = 0; i < this.props.cards.length; i++) {

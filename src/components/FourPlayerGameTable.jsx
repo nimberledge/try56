@@ -5,6 +5,7 @@ import ScoreBoard from './ScoreBoard';
 import CurrentRound from './CurrentRound';
 import HiddenTrumpCard from './HiddenTrumpCard';
 import BidTable from './BidTable';
+import GameInfo from './GameInfo';
 import { INVALID_MOVE } from 'boardgame.io/core';
 
 export class FourPlayerGameTable extends React.Component {
@@ -86,16 +87,14 @@ export class FourPlayerGameTable extends React.Component {
 				{ bid_table_div }
 			</div>
 		</div>;
-		// Scoreboard
-		let score_board_container = <div id='scoreboard-container'>
-			<ScoreBoard id='score-board' score={ this.props.G.overall_pts } />
+		let info_div = <div id='game-info-container'>
+			<GameInfo score={ this.props.G.overall_pts } last_round_info={ this.props.G.last_round_info }
+				game_bid={ this.props.G.game_bid } bids={ this.props.G.bids } />
 		</div>;
 
-
-
-		
 		return <div>
 			{ game_table_div }
+			{ info_div }
 		</div>;
 	}
 };

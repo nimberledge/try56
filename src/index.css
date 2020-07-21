@@ -218,6 +218,83 @@ code {
   word-spacing: 1.4em;
 }
 
+#game-info-container {
+  position: absolute;
+  width: 250px;
+  height: 650px;
+  left: 975px;
+  top: 15%;
+}
+
+#score_table_header {
+  font-size: 30px;
+}
+
+#last_game_result {
+  font-size: 25px;
+  color: green;
+}
+
+#team0_cell {
+  font-size: 30px;
+  color: blue;
+}
+
+#team1_cell {
+  font-size: 30px;
+  color: red;
+}
+
+#team0_score {
+  font-size: 30px;
+  color: blue;
+}
+
+#team1_score {
+  font-size: 30px;
+  color: red;
+}
+
+#game_bid {
+  font-size: 25px;
+  color: green;
+}
+
+#player0-button {
+  background-color: blue;
+  width: 70px;
+  height: 70px;
+  font-size: 18px;
+}
+
+#player1-button {
+  background-color: red;
+  width: 70px;
+  height: 70px;
+  font-size: 18px;
+}
+
+#player2-button {
+  background-color: blue;
+  width: 70px;
+  height: 70px;
+  font-size: 18px;
+}
+
+#player3-button {
+  background-color: red;
+  width: 70px;
+  height: 70px;
+  font-size: 18px;
+}
+
+#bid_history_table {
+  width: 200px;
+  height: 200px;
+  font-size: 20px;
+  color: green;
+}
+
 #game_table {
   display: inline-block;;
   width: 854px;

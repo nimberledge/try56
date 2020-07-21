@@ -21,16 +21,16 @@ class App extends React.Component {
       return (
         <div>
           <p>Play as</p>
-          <button onClick={() => this.setState({ playerID: "0" })}>
+          <button id='player0-button' onClick={() => this.setState({ playerID: "0" })}>
             Player 0
           </button>
-          <button onClick={() => this.setState({ playerID: "1" })}>
+          <button id='player1-button' onClick={() => this.setState({ playerID: "1" })}>
             Player 1
           </button>
-					<button onClick={() => this.setState({ playerID: "2" })}>
+					<button id='player2-button' onClick={() => this.setState({ playerID: "2" })}>
             Player 2
           </button>
-					<button onClick={() => this.setState({ playerID: "3" })}>
+					<button id='player3-button' onClick={() => this.setState({ playerID: "3" })}>
             Player 3
           </button>
         </div>
