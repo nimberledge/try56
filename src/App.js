@@ -1,5 +1,4 @@
 import React from 'react';
-import { render } from "react-dom";
 import FourPlayerClient from './FourPlayerClient';
 import { SocketIO } from 'boardgame.io/multiplayer';
 import { Client } from 'boardgame.io/react';

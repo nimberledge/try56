@@ -9,6 +9,7 @@
     "boardgame.io": "^0.39.14",
     "cardsJS": "^1.1.1",
     "esm": "^3.2.25",
+    "jquery": "^3.5.1",
     "react": "^16.13.1",
     "react-bootstrap": "^1.2.2",
     "react-dom": "^16.13.1",

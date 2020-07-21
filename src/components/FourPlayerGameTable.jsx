@@ -7,6 +7,32 @@ import CurrentRound from './CurrentRound';
 import HiddenTrumpCard from './HiddenTrumpCard';
 
 export class FourPlayerGameTable extends React.Component {
+	playCard(card_key, ctx, playerID) {
+		// Make clicks invalid if it's not the current player's turn
+		if (ctx.phase === 'bid_phase' || ctx.currentPlayer != playerID) {
+			alert("Wait for your turn");
+			return;
+		}
+		let card_index = card_key.slice(9);
+		// alert(card_index);
+		if (ctx.phase === 'hide_trump_phase') {
+			this.props.moves.selectHideTrump(card_index*1);
+		} else if (ctx.phase === 'table_play_phase') {
+			this.props.moves.playCardFromHand(card_index*1);
+		}
+	}
+
+	getPlayerCardImgs(hand, ctx, playerID) {
+		let card_imgs = [];
+		for (let i = 0; i < hand.length; i++) {
+			let card_src = 'cards/' + hand[i].rank + hand[i].suit + '.svg';
+			let card_key = 'play_card' + i;
+			card_imgs.push(<img className='card' id={ card_key } src={ card_src } alt={ card_src }
+			onClick={(() => this.playCard(card_key, ctx, playerID))} />);
+		}
+		return card_imgs;
+	}
+
 	render() {
 		let current_player = this.props.playerID;
 		// let current_player_cards = this.props.G.players[this.props.playerID].cards;
@@ -20,10 +46,17 @@ export class FourPlayerGameTable extends React.Component {
 		// console.log(is_bid_phase);
 		// console.log(this.props.ctx.phase);
 		// console.log(this.props.playerID);
+
+		// Was not able to make a hand active, so let's try what I did with the debug table
+
+		let play_card_imgs = this.getPlayerCardImgs(current_player_cards, this.props.ctx, current_player);
 		let table_id = 'game_table';
-		let game_table_div = <div className='GameTable' id={ table_id }>
+		let game_table_div =
+		<div className='GameTable' id={ table_id }>
 			<div id='player_cards_container'>
-				<PlayerCards id="player_cards" cards= { current_player_cards } />
+				<div id="player_cards"  className="hand hhand-compact active-hand">
+					{ play_card_imgs }
+				</div>
 			</div>
 			<div id='opp_left_cards_container'>
 				<OpponentCards id="opp_left_cards" cards= { opp_left_cards } />

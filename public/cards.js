@@ -39,6 +39,7 @@ var cardsScript = document.currentScript;
         // Play is called whenever a card in an hand is clicked.  If the hand is active
         // then playCard is called.
         play: function (card) {
+            console.log("play was called");
             if (card.parents(".active-hand").length > 0) {
                 this.playCard(card);
             }

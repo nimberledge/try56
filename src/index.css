@@ -14,8 +14,20 @@ code {
 }
 
 #player-cards {
-  display: inline-block;
+  display: block;
   width: 100%;
+  height: 100%;
+  z-index: +1;
+}
+
+#player_cards_container {
+  text-align: center;
+  position: absolute;
+  width: 64%;
+  height: 250px;
+  left: 18%;
+  bottom: -50px;
+  z-index: +1;
 }
 
 #opp_left_cards {
@@ -35,20 +47,12 @@ code {
   width: 100%;
 }
 
-#player_cards_container {
-  text-align: center;
-  position: absolute;
-  width: 80%;
-  left: 10%;
-  bottom: 2%;
-}
-
 #teammate_cards_container {
   text-align: center;
   position: absolute;
   width: 80%;
   left: 10%;
-  top: 2%;
+  top: 0%;
   transform: rotate(180deg);
 }
 
@@ -57,7 +61,7 @@ code {
   position: relative;
   width: 80%;
   right: 30%;
-  top: 50%;
+  top: 44%;
   transform: rotate(90deg);
 }
 
@@ -66,7 +70,7 @@ code {
   position: relative;
   width: 80%;
   left: 50%;
-  top: 25%;
+  top: 18%;
   transform: rotate(270deg);
 }
 
@@ -81,23 +85,23 @@ code {
 #west-table-card {
   position: absolute;
   width: 140%;
-  top: 38%;
-  right: 3%;
+  top: 35%;
+  right: 6%;
   transform: rotate(90deg);
 }
 
 #east-table-card {
   position: absolute;
   width: 140%;
-  top: 38%;
-  left: 7.5%;
+  top: 35%;
+  left: 12%;
   transform: rotate(270deg);
 }
 
 #north-table-card {
   width: 140%;
   position: absolute;
-  top: 15%;
+  top: 13%;
   left: -17%;
   text-align: center;
   transform: rotate(180deg);
@@ -106,7 +110,7 @@ code {
 #south-table-card {
   width: 140%;
   position: absolute;
-  top: 62%;
+  top: 58%;
   left: -17%;
 }
 
@@ -121,15 +125,15 @@ code {
 #east-trump-card {
   position: absolute;
   width: 140%;
-  left: 30%;
-  top: 15%;
+  left: 28%;
+  top: 10%;
   transform: rotate(90deg);
 }
 
 #north-trump-card {
   position: absolute;
   width: 140%;
-  top: 12%;
+  top: 9.25%;
   right: 8%;
 }
 
@@ -137,21 +141,21 @@ code {
   position: absolute;
   width: 140%;
   transform: rotate(270deg);
-  right: 30%;
+  right: 28%;
   top: 60%;
 }
 
 #south-trump-card {
   position: absolute;
-  width: 140%;
-  top: 63%;
-  left: 7%;
+  width: 100%;
+  top: 62%;
+  left: 28%;
 }
 
 #scoreboard-container {
   position: absolute;
   left: 80%;
-  top: 30%;
+  top: 12%;
   color: white;
   font-size: 400%;
   float: left;
@@ -168,18 +172,17 @@ code {
 
 #game_table {
   display: inline-block;;
-  width: 65%;
-  height: 72.5%;
+  width: 1280px;
+  height: 740px;
   padding-top: 10%;
   border-radius: 20px;
   border: 10px solid #443022;
   /* border-color: brown; */
   background: #076324;
-  opacity: 1;
   /* float: center; */
   position: absolute;
   left: 5%;
-  top: 30%;
+  top: 15%;
   text-align: center;
 }
 
