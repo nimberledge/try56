@@ -5,17 +5,9 @@ import ScoreBoard from './ScoreBoard';
 import CurrentRound from './CurrentRound';
 import HiddenTrumpCard from './HiddenTrumpCard';
 import BidTable from './BidTable';
+import { INVALID_MOVE } from 'boardgame.io/core';
 
 export class FourPlayerGameTable extends React.Component {
-	processBid(button_id) {
-		if (this.props.ctx.phase !== 'bid_phase') {
-			alert("How did you manage this??");
-			return;
-		}
-		let bid_value = button_id.slice(10);
-		this.props.moves.makeBid(bid_value*1);
-	}
-
 	playCard(card_key, ctx, playerID) {
 		// Make clicks invalid if it's not the current player's turn
 		if (ctx.phase === 'bid_phase' || ctx.currentPlayer !== playerID) {
@@ -27,7 +19,9 @@ export class FourPlayerGameTable extends React.Component {
 		if (ctx.phase === 'hide_trump_phase') {
 			this.props.moves.selectHideTrump(card_index*1);
 		} else if (ctx.phase === 'table_play_phase') {
-			this.props.moves.playCardFromHand(card_index*1);
+			if (this.props.moves.playCardFromHand(card_index*1) === INVALID_MOVE) {
+				alert("Invalid move");
+			};
 		}
 	}
 
@@ -86,7 +80,7 @@ export class FourPlayerGameTable extends React.Component {
 			<div id='trump_card_container'>
 				<HiddenTrumpCard id="hidden-trump-card" game_bid={ this.props.G.game_bid } current_player={ current_player }
 					trump_revealed={ this.props.G.trump_revealed } imminent_trump_request={ this.props.G.imminent_trump_request }
-					trump_card={ this.props.G.hidden_trump_card } bid_phase={ is_bid_phase } />
+					trump_card={ this.props.G.hidden_trump_card } bid_phase={ is_bid_phase } moves={ this.props.moves } />
 			</div>
 			<div id='bid_table_container'>
 				{ bid_table_div }

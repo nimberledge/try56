@@ -1,17 +1,16 @@
 import React from 'react';
+import { INVALID_MOVE } from 'boardgame.io/core';
 
 class BidTable extends React.Component {
-	checkButtonClick(button_id) {
-		alert(button_id);
-	}
-
 	processBid(button_id) {
 		if (this.props.ctx.phase !== 'bid_phase') {
-			alert("How did you manage this??");
+			alert("How did you manage this??!!111");
 			return;
 		}
 		let bid_value = button_id.slice(10);
-		this.props.moves.makeBid(bid_value*1);
+		if (this.props.moves.makeBid(bid_value*1) === INVALID_MOVE) {
+			alert("Illegal bid");
+		};
 	}
 
 	render () {

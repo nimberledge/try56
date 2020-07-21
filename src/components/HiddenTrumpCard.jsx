@@ -1,6 +1,11 @@
 import React from 'react';
+import { INVALID_MOVE } from 'boardgame.io/core';
 
 class HiddenTrumpCard extends React.Component {
+	processTrumpRequest() {
+		this.props.moves.requestTrump();
+	}
+
 	render () {
 		// Cards in order of SWNE
 		let bidder_position = -1;
@@ -17,7 +22,9 @@ class HiddenTrumpCard extends React.Component {
 			if (this.props.bid_phase) {
 				west_card = <div id='west-trump-card'> <img className='card' src='' alt='' /> </div>;
 			} else if (!this.props.trump_revealed) {
-				west_card = <div id='west-trump-card'> <img className='card' src='cards/Blue_Back.svg' alt='' /> </div>;
+				west_card = <div id='west-trump-card'>
+					<img className='card' src='cards/Red_Back.svg' alt='' onClick={ () => this.processTrumpRequest() } />
+				</div>;
 			} else if (this.props.imminent_trump_request) {
 				let card_src = 'cards/' + this.props.trump_card.rank + this.props.trump_card.suit + '.svg';
 				west_card = <div id='west-trump-card'> <img className='card' src={ card_src } alt={ card_src } /> </div>;
@@ -30,7 +37,9 @@ class HiddenTrumpCard extends React.Component {
 			if (this.props.bid_phase) {
 				north_card = <div id='north-trump-card'> <img className='card' src='' alt='' /> </div>;
 			} else if (!this.props.trump_revealed) {
-				north_card = <div id='north-trump-card'> <img className='card' src='cards/Blue_Back.svg' alt='' /> </div>;
+				north_card = <div id='north-trump-card'>
+					<img className='card' src='cards/Red_Back.svg' alt='' onClick={ () => this.processTrumpRequest() } />
+				</div>;
 			} else if (this.props.imminent_trump_request) {
 				let card_src = 'cards/' + this.props.trump_card.rank + this.props.trump_card.suit + '.svg';
 				north_card = <div id='north-trump-card'> <img className='card' src={ card_src } alt={ card_src } /> </div>;
@@ -43,7 +52,9 @@ class HiddenTrumpCard extends React.Component {
 			if (this.props.bid_phase) {
 				east_card = <div id='east-trump-card'> <img className='card' src='' alt='' /> </div>;
 			} else if (!this.props.trump_revealed) {
-				east_card = <div id='east-trump-card'> <img className='card' src='cards/Blue_Back.svg' alt='' /> </div>;
+				east_card = <div id='east-trump-card'>
+					<img className='card' src='cards/Red_Back.svg' alt='' onClick={ () => this.processTrumpRequest() } />
+				</div>;
 			} else if (this.props.imminent_trump_request) {
 				let card_src = 'cards/' + this.props.trump_card.rank + this.props.trump_card.suit + '.svg';
 				east_card = <div id='east-trump-card'> <img className='card' src={ card_src } alt={ card_src } /> </div>;
@@ -56,7 +67,9 @@ class HiddenTrumpCard extends React.Component {
 			if (this.props.bid_phase) {
 				south_card = <div id='south-trump-card'> <img className='card' src='' alt='' /> </div>;
 			} else if (!this.props.trump_revealed) {
-				south_card = <div id='south-trump-card'> <img className='card' src='cards/Blue_Back.svg' alt='' /> </div>;
+				south_card = <div id='south-trump-card'>
+					<img className='card' src='cards/Red_Back.svg' alt='' onClick={ () => this.processTrumpRequest() } />
+				</div>;
 			} else if (this.props.imminent_trump_request) {
 				let card_src = 'cards/' + this.props.trump_card.rank + this.props.trump_card.suit + '.svg';
 				south_card = <div id='south-trump-card'> <img className='card' src={ card_src } alt={ card_src } /> </div>;
