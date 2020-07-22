@@ -29,7 +29,7 @@ class GameInfo extends React.Component {
 		if (!!this.props.game_bid) {
 			game_bid = <div id='game_bid'> Current game bid: { this.props.game_bid.bid_value } by { this.props.game_bid.player } </div>;
 		} else {
-			game_bid = <div id='game_bid'> No bids on the table </div>;
+			game_bid = <div id='game_bid'> No bids on the table, { this.props.starting_player } to start  </div>;
 		}
 
 		let bid_history_table = '';

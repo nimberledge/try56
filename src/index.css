@@ -75,7 +75,7 @@ code {
   width: 64%;
   height: 164px;
   left: 18%;
-  bottom: -15px;
+  bottom: -25px;
   z-index: +1;
 }
 
@@ -222,8 +222,8 @@ code {
   position: absolute;
   width: 250px;
   height: 650px;
-  left: 975px;
-  top: 15%;
+  left: 1000px;
+  top: 100px;
 }
 
 #score_table_header {
@@ -295,6 +295,36 @@ code {
   color: green;
 }
 
+#current-player-info {
+  font-size: 30px;
+  position: absolute;
+  top: 785px;
+  left: 440px;
+}
+
+#west-player-info {
+  font-size: 30px;
+  position: absolute;
+  transform: rotate(270deg);
+  top: 400px;
+  left: -25px;
+}
+
+#east-player-info {
+  font-size: 30px;
+  position: absolute;
+  top: 400px;
+  left: 900px;
+  transform: rotate(270deg);
+}
+
+#north-player-info {
+  font-size: 30px;
+  position: absolute;
+  left: 440px;
+  top: 55px;
+}
+
 #game_table {
   display: inline-block;;
   width: 854px;
@@ -306,8 +336,8 @@ code {
   background: #076324;
   /* float: center; */
   position: absolute;
-  left: 5%;
-  top: 15%;
+  left: 50px;
+  top: 100px;
   text-align: center;
 }
 
