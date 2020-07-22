@@ -57,6 +57,16 @@ export class FourPlayerGameTable extends React.Component {
 		}
 
 		// Was not able to make a hand active, so let's try what I did with the debug table
+		let select_trump_div = '';
+		if (this.props.ctx.phase ==='hide_trump_phase') {
+			if (this.props.ctx.currentPlayer === this.props.playerID) {
+				select_trump_div = <div id='select-trump-div'> Select your trump card to hide </div>;
+			} else {
+				select_trump_div = <div id='select-trump-div'> { this.props.ctx.currentPlayer } is choosing a trump card</div>;
+			}
+		} else {
+			select_trump_div = <div id='select-trump-div'> </div>;
+		}
 
 		let play_card_imgs = this.getPlayerCardImgs(current_player_cards, this.props.ctx, current_player);
 		let table_id = 'game_table';
@@ -87,6 +97,7 @@ export class FourPlayerGameTable extends React.Component {
 			<div id='bid_table_container'>
 				{ bid_table_div }
 			</div>
+			{ select_trump_div }
 		</div>;
 		let info_div = <div id='game-info-container'>
 			<GameInfo score={ this.props.G.overall_pts } last_round_info={ this.props.G.last_round_info }

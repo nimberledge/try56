@@ -325,6 +325,14 @@ code {
   top: 55px;
 }
 
+#select-trump-div {
+  font-size: 30px;
+  color: black;
+  position: absolute;
+  left: 27%;
+  top: 70%
+}
+
 #game_table {
   display: inline-block;;
   width: 854px;
