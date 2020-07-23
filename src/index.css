@@ -295,6 +295,13 @@ code {
   color: green;
 }
 
+#round-history-table {
+  width: 200px;
+  height: 200px;
+  font-size: 20px;
+  color: green;
+}
+
 #current-player-info {
   font-size: 30px;
   position: absolute;

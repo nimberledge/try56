@@ -117,7 +117,8 @@ export class FourPlayerGameTable extends React.Component {
 		</div>;
 		let info_div = <div id='game-info-container'>
 			<GameInfo score={ this.props.G.overall_pts } last_round_info={ this.props.G.last_round_info }
-				game_bid={ this.props.G.game_bid } bids={ this.props.G.bids } starting_player={ this.props.G.starting_player } />
+				game_bid={ this.props.G.game_bid } bids={ this.props.G.bids } starting_player={ this.props.G.starting_player }
+				round_winners={ this.props.G.round_winners } />
 		</div>;
 
 		let player_info = <CurrentPlayerInfo playerID={ current_player } playing={ this.props.ctx.currentPlayer } />;
