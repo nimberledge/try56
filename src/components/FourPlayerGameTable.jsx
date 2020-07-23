@@ -38,6 +38,10 @@ export class FourPlayerGameTable extends React.Component {
 		return card_imgs;
 	}
 
+	triggerStartNewRound() {
+		this.props.moves.startNewRound();
+	}
+
 	render() {
 		let current_player = this.props.playerID;
 		// let current_player_cards = this.props.G.players[this.props.playerID].cards;
@@ -67,6 +71,17 @@ export class FourPlayerGameTable extends React.Component {
 		} else {
 			select_trump_div = <div id='select-trump-div'> </div>;
 		}
+
+		let start_new_round_button = '';
+		if (this.props.ctx.phase === 'start_new_round_phase' && this.props.ctx.currentPlayer == current_player) {
+			start_new_round_button = <div id='new-round-div' style={{'z-index': +2}}>
+				<button id='new-round-button' onClick={ (() => this.triggerStartNewRound()) }> Start new round </button>
+			</div>;
+		} else {
+			start_new_round_button = <div id='new-round-div'>
+			</div>;
+		}
+
 
 		let play_card_imgs = this.getPlayerCardImgs(current_player_cards, this.props.ctx, current_player);
 		let table_id = 'game_table';
@@ -98,6 +113,7 @@ export class FourPlayerGameTable extends React.Component {
 				{ bid_table_div }
 			</div>
 			{ select_trump_div }
+			{ start_new_round_button }
 		</div>;
 		let info_div = <div id='game-info-container'>
 			<GameInfo score={ this.props.G.overall_pts } last_round_info={ this.props.G.last_round_info }
@@ -106,7 +122,7 @@ export class FourPlayerGameTable extends React.Component {
 
 		let player_info = <CurrentPlayerInfo playerID={ current_player } playing={ this.props.ctx.currentPlayer } />;
 
-		return <div>
+		return <div id='main-container'>
 			{ game_table_div }
 			{ info_div }
 			{ player_info }

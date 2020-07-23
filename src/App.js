@@ -8,7 +8,7 @@ const FourPlayer56Client = Client({
   game: FourPlayer56Game,
   board: FourPlayerGameTable,
 	numPlayers: 4,
-  multiplayer: SocketIO({ server: "192.168.1.18:8000" }),
+  multiplayer: SocketIO({ server: "192.168.1.16:8000" }),
   debug: false
 });
 

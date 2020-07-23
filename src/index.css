@@ -15,9 +15,9 @@ code {
 
 #bid_table_container {
   position: absolute;
-  width: 50%;
-  left: 25%;
-  top: 21%;
+  width: 56%;
+  left: 22%;
+  top: 26%;
   text-align: center;
 }
 
@@ -222,8 +222,8 @@ code {
   position: absolute;
   width: 250px;
   height: 650px;
-  left: 1000px;
-  top: 100px;
+  left: 78%;
+  top: 15%;
 }
 
 #score_table_header {
@@ -298,31 +298,32 @@ code {
 #current-player-info {
   font-size: 30px;
   position: absolute;
-  top: 785px;
-  left: 440px;
+  top: 110%;
+  left: 35.5%;
+  z-index: +1;
 }
 
 #west-player-info {
   font-size: 30px;
   position: absolute;
   transform: rotate(270deg);
-  top: 400px;
-  left: -25px;
+  top: 55%;
+  left: 0%;
 }
 
 #east-player-info {
   font-size: 30px;
   position: absolute;
-  top: 400px;
-  left: 900px;
+  top: 55%;
+  left: 72%;
   transform: rotate(270deg);
 }
 
 #north-player-info {
   font-size: 30px;
   position: absolute;
-  left: 440px;
-  top: 55px;
+  left: 35.5%;
+  top: 9%;
 }
 
 #select-trump-div {
@@ -333,10 +334,25 @@ code {
   top: 70%
 }
 
+#new-round-div {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  left: 85%;
+  top: 80%;
+}
+
+#new-round-button {
+  font-size: 20px;
+  z-index: +2;
+  width: 100px;
+  height: 100px;
+}
+
 #game_table {
   display: inline-block;;
-  width: 854px;
-  height: 493px;
+  width: 68%;
+  height: 73%;
   padding-top: 10%;
   border-radius: 20px;
   border: 10px solid #443022;
@@ -344,21 +360,13 @@ code {
   background: #076324;
   /* float: center; */
   position: absolute;
-  left: 50px;
-  top: 100px;
+  left: 5%;
+  top: 15%;
   text-align: center;
 }
 
-#main_container {
-  width: 40%;
-  height: 40%;
+#main-container {
   position: absolute;
-  left: 20%;
-  top: 10%;
-}
-
-#player_div {
-  width: 100vw;
-  height: 100vw;
-  float: left;
+  width: 1400px;
+  height: 720px;
 }

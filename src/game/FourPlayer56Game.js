@@ -36,9 +36,11 @@ function makeBid(G, ctx, amount) {
 	if (G.game_bid == null || amount > G.game_bid.bid_value) {
 		G.game_bid = { player: ctx.currentPlayer, bid_value: amount };
 		G.chat.push(ctx.currentPlayer + " takes the bid at " + amount);
+		console.log(ctx.currentPlayer + " takes the bid at " + amount);
 	}
 	if (amount === 0) {
 		G.chat.push(ctx.currentPlayer + " opts to pass");
+		console.log(ctx.currentPlayer + " opts to pass");
 	}
 
 	// Log the history
@@ -54,6 +56,7 @@ function isBiddingDone(G, ctx) {
 	// If the current bid can't be outbid we're done
 	if (G.game_bid != null && G.game_bid.bid_value === TANI_BID) {
 		G.chat.push(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
+		console.log(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
 		return true;
 	}
 	// If there's < N bids bidding can't be done
@@ -65,6 +68,7 @@ function isBiddingDone(G, ctx) {
 		}
 		if (bid_sum === 0) {
 			G.chat.push(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
+			console.log(G.game_bid.player + " wins the bid at " + G.game_bid.bid_value);
 			return true;
 		}
 	}
@@ -78,6 +82,7 @@ function selectHideTrump(G, ctx, card_index) {
 	G.hidden_trump_card = G.players[ctx.currentPlayer].cards[card_index];
 	G.players[ctx.currentPlayer].cards.splice(card_index, 1);
 	G.chat.push(G.game_bid.player + " hid a card. It's a secret.");
+	console.log(G.game_bid.player + " hid a card. It's a secret.");
 	G.chat.push("Don't tell anyone, but it was: " + G.hidden_trump_card.rank + G.hidden_trump_card.suit);
 	ctx.events.endPhase();
 }
@@ -164,11 +169,12 @@ function playCardFromHand(G, ctx, card_index) {
 		var next_starter = GameUtils.computeRoundWinner(G.current_round, G.trump_suit);
 		G.round_winners.push(next_starter);
 		G.chat.push(next_starter + " won round " + G.current_round_idx);
+		console.log(next_starter + " won round " + G.current_round_idx);
 
 		// If we've played all the rounds, compute whether teams made their bid amounts
 		if (G.rounds.length === NUM_TABLE_ROUNDS) {
 			computeGameWinner(G, ctx);
-			resetGameState(G, ctx);
+			ctx.events.endPhase({ next: 'start_new_round_phase'});
 		} else {
 			ctx.events.endTurn({ next: next_starter });
 		}
@@ -215,6 +221,11 @@ function computeGameWinner(G, ctx) {
 	G.last_round_info = game_info;
 }
 
+function startNewRound(G, ctx) {
+	console.log("Ending game, dealer shifting.")
+	resetGameState(G, ctx);
+}
+
 function resetGameState(G, ctx) {
 	G.game_bid = null;
 	G.starting_player = (G.starting_player + 1) % NUM_PLAYERS;
@@ -233,6 +244,7 @@ function resetGameState(G, ctx) {
 	// G.chat.push("");
 	G.chat = [];
 	G.chat.push("Starting a new round, dealing cards");
+	console.log("Starting a new round, dealing cards");
 	// Deal cards
 	G.deck = GameUtils.generate4PDeck();
 	var deck_length = G.deck.length;
@@ -365,6 +377,17 @@ export const FourPlayer56Game = {
 					noLimit: true
 				}
 			},
+			next: 'start_new_round_phase',
 		},
+		start_new_round_phase: {
+			turn: {
+				order: {
+					first: (G, ctx) => G.game_bid.player,
+				}
+			},
+			moves: {
+				startNewRound
+			}
+		}
 	},
 };
