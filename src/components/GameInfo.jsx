@@ -57,7 +57,7 @@ class GameInfo extends React.Component {
 				let round_color = team_colors[(this.props.round_winners[i]*1) % 2];
 				rounds.push(<tr> <td style={{color: round_color}}> Round { i+1 } won by { this.props.round_winners[i] } </td> </tr>);
 			}
-			round_history_table = <table id='round-history-table'> { rounds } </table>;
+			round_history_table = <table id='round-history-table'> <th> Rounds: </th> { rounds } </table>;
 		} else {
 			round_history_table = <table id='round-history-table'> </table>;
 		}

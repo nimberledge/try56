@@ -289,17 +289,19 @@ code {
 }
 
 #bid_history_table {
-  width: 200px;
+  width: 120px;
   height: 200px;
   font-size: 20px;
   color: green;
+  text-align: center;
 }
 
 #round-history-table {
-  width: 200px;
+  width: 175px;
   height: 200px;
   font-size: 20px;
   color: green;
+  text-align: center;
 }
 
 #current-player-info {

@@ -382,7 +382,7 @@ export const FourPlayer56Game = {
 		start_new_round_phase: {
 			turn: {
 				order: {
-					first: (G, ctx) => G.game_bid.player,
+					first: (G, ctx) => G.starting_player,
 				}
 			},
 			moves: {
