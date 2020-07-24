@@ -358,6 +358,10 @@ code {
   height: 100px;
 }
 
+#logo56 {
+  width: 110px;
+}
+
 #game_table {
   display: inline-block;;
   width: 68%;

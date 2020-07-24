@@ -122,8 +122,9 @@ export class FourPlayerGameTable extends React.Component {
 		</div>;
 
 		let player_info = <CurrentPlayerInfo playerID={ current_player } playing={ this.props.ctx.currentPlayer } />;
-
+		let logo_comp = <img id='logo56' src='56_logo.png' alt='' />;
 		return <div id='main-container'>
+			{ logo_comp }
 			{ game_table_div }
 			{ info_div }
 			{ player_info }
